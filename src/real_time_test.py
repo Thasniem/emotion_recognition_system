@@ -5,8 +5,10 @@ import os
 from collections import deque
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-model_path = os.path.join(BASE_DIR, "model", "emotion_model.h5")
-model = tf.keras.models.load_model(model_path, compile=False)
+
+model_path = os.path.join(BASE_DIR, "model", "emotion_model_tf.keras")
+model = tf.keras.models.load_model(model_path)
+
 
 emotion_labels = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
