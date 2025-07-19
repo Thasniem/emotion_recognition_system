@@ -4,11 +4,16 @@ import tensorflow as tf
 import os
 from collections import deque
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Correct path to the model file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # emotion_recognition_cnn/src
+model_path = os.path.join(BASE_DIR, "..", "model", "emotion_model_tf.keras")
+model_path = os.path.abspath(model_path)
 
-model_path = os.path.join(BASE_DIR, "model", "emotion_model_tf.keras")
+if not os.path.exists(model_path):
+    raise FileNotFoundError(f"Model file not found at: {model_path}")
+
+# Load model
 model = tf.keras.models.load_model(model_path)
-
 
 emotion_labels = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -19,7 +24,6 @@ SADNESS_THRESHOLD = 0.3
 
 cap = cv2.VideoCapture(0)
 print("Press 'q' to quit.")
-
 
 while True:
     ret, frame = cap.read()
