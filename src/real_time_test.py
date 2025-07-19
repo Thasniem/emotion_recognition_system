@@ -20,6 +20,7 @@ SADNESS_THRESHOLD = 0.3
 cap = cv2.VideoCapture(0)
 print("Press 'q' to quit.")
 
+
 while True:
     ret, frame = cap.read()
     if not ret:
