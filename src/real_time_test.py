@@ -4,27 +4,17 @@ import tensorflow as tf
 import os
 from collections import deque
 
-# Dynamic path to model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model_path = os.path.join(BASE_DIR, "model", "emotion_model.h5")
+model = tf.keras.models.load_model(model_path, compile=False)
 
-# Load model
-model = tf.keras.models.load_model(model_path)
-
-# Emotion labels - must match training order
 emotion_labels = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
-
-# Face detector
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
-# Prediction smoothing history
 prediction_history = deque(maxlen=5)
 
-# Confidence threshold
 CONFIDENCE_THRESHOLD = 0.4
-SADNESS_THRESHOLD = 0.3  # lower for sadness
+SADNESS_THRESHOLD = 0.3
 
-# Start webcam
 cap = cv2.VideoCapture(0)
 print("Press 'q' to quit.")
 
@@ -47,10 +37,8 @@ while True:
         top_index = np.argmax(predictions)
         top_confidence = predictions[0][top_index]
 
-        # Check if confidence is above threshold
         if (emotion_labels[top_index] == 'sad' and top_confidence >= SADNESS_THRESHOLD) or \
            (top_confidence >= CONFIDENCE_THRESHOLD):
-            # Weighted smoothing: sadness counts double
             if emotion_labels[top_index] == 'sad':
                 prediction_history.extend([top_index] * 2)
             else:
